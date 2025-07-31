@@ -15,10 +15,6 @@ public class CarDaoImpl implements CarDao {
         this.cars = cars;
     }
 
-    private List<Car> getCars() {
-        return cars;
-    }
-
     private List<Car> makeCarList() {
         cars = new ArrayList<>();
         cars.add(new Car("Bmw", "m5 competition ", 625));
@@ -29,13 +25,11 @@ public class CarDaoImpl implements CarDao {
         return cars;
     }
 
-    @Override
-    public List<Car> getAllCars() {
-        return getCars();
-    }
+
 
     @Override
     public List<Car> getList(int limit) {
-        return getAllCars().stream().limit(limit).toList();
+        return cars.stream().limit(Math.max(limit, 0)).toList();
     }
+
 }
