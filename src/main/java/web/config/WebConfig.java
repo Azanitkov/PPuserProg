@@ -47,4 +47,8 @@ public class WebConfig implements WebMvcConfigurer {
         resolver.setTemplateEngine(templateEngine());
         registry.viewResolver(resolver);
     }
+    @Bean
+    public org.springframework.web.multipart.MultipartResolver multipartResolver(){
+        return new org.springframework.web.multipart.support.StandardServletMultipartResolver();
+    }
 }
