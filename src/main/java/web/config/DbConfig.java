@@ -22,7 +22,7 @@ import java.util.Properties;
 @Configuration
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
-@ComponentScan(value = "web")
+@ComponentScan(basePackages = "web")
 public class DbConfig {
     @Resource
     private Environment env;
@@ -32,11 +32,14 @@ public class DbConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
         em.setPackagesToScan(env.getRequiredProperty("db.entity.package"));
-        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(hibernateJpaVendorAdapter);
+        em.setPersistenceProvider(hibernateJpaVendorAdapter.getPersistenceProvider());
         em.setJpaProperties(getHibernateProperties());
         return em;
 
     }
+
     @Bean
     public DataSource dataSource() {
         BasicDataSource ds = new BasicDataSource();
@@ -47,8 +50,9 @@ public class DbConfig {
         return ds;
 
     }
+
     @Bean
-    public PlatformTransactionManager platformTransactionManager(){
+    public PlatformTransactionManager platformTransactionManager() {
         JpaTransactionManager manager = new JpaTransactionManager();
         manager.setEntityManagerFactory(entityManagerFactory().getObject());
         return manager;
@@ -57,12 +61,9 @@ public class DbConfig {
 
     private Properties getHibernateProperties() {
         Properties properties = new Properties();
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream("db.properties")) {
-            if (is == null) throw new IllegalArgumentException("db.properties not found");
-            properties.load(is);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Can't load db.properties", e);
-        }
+        properties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
+        properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
+        properties.put("hibernate.hbm2ddl.auto", env.getRequiredProperty("hibernate.hbm2ddl.auto"));
         return properties;
     }
 

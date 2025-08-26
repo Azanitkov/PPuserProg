@@ -13,7 +13,7 @@ import web.service.UserService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping()
 public class UsersController {
     public UserService userService;
 
@@ -24,7 +24,7 @@ public class UsersController {
 
     @GetMapping()
     public String index(Model model) {
-        return "redirect:/users";
+        return "users/users";
     }
 
     @GetMapping(value = "/new")
@@ -36,7 +36,7 @@ public class UsersController {
     @PostMapping("/users")
     public String create(User user) {
         userService.createUser(user);
-        return "users/users";
+        return "redirect:/users";
     }
 
     @GetMapping("/users")
