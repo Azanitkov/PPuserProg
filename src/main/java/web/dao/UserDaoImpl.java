@@ -3,6 +3,7 @@ package web.dao;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import web.models.User;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+
 @Repository
 public class UserDaoImpl implements UserDao {
     @PersistenceContext
@@ -24,12 +26,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void newUser() {
-
-    }
-
-    @Override
-    @GetMapping("/new")
     public String newUser(@RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("age") Integer age, Model model) {
         User user = new User();
 
@@ -38,7 +34,7 @@ public class UserDaoImpl implements UserDao {
         user.setAge(age);
 
         model.addAttribute("user", user);
-        return "users/new";
+        return "redirect:/users";
     }
 
     @Override
@@ -47,20 +43,27 @@ public class UserDaoImpl implements UserDao {
         return user;
     }
 
-
     @Override
-    public List<User> readUser() {
-        return null;
+    public void updateUser(long id, User updatedUser) {
+        User user = entityManager.find(User.class, id);
+        if (user != null) {
+            user.setName(updatedUser.getName());
+            user.setSurname(updatedUser.getSurname());
+            user.setAge(updatedUser.getAge());
+        }
     }
 
     @Override
-    public List<User> updateUser() {
-        return null;
+    public void deleteUser(long id) {
+        User user = entityManager.find(User.class, id);
+        if (user != null) {
+            entityManager.remove(user);
+        }
     }
 
     @Override
-    public void deleteUser() {
-
+    public User getUserById(long id) {
+        return entityManager.find(User.class, id);
     }
 
 }

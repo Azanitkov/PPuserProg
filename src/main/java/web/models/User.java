@@ -13,7 +13,7 @@ public class User {
    @Column
     private String surname;
     @Column
-    private Integer age;
+    private int age;
 
     public User() {
 
@@ -52,11 +52,11 @@ public class User {
         this.surname = surname;
     }
 
-    public Integer getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(int age) {
         this.age = age;
     }
 

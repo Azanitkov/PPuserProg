@@ -9,18 +9,36 @@
 <table border="1" cellpadding="5" cellspacing="0">
     <thead>
     <tr>
+        <th>id</th>
         <th>name</th>
         <th>surname</th>
         <th>age</th>
     </tr>
+
+
     </thead>
+    <div style="margin-top: 20px">
+        <a th:href="@{/users/new}">
+            <button type="button"> Create new user</button>
+        </a>
+    </div>
     <tbody>
     <tr th:each="user : ${users}">
+        <td th:text="${user.id}">id</td>
         <td th:text="${user.name}">name</td>
         <td th:text="${user.surname}">surname</td>
         <td th:text="${user.age}">age</td>
+        <td>
+            <form th:method="GET" th:action="@{/users/{id}(id=${user.id})}">
+                <input type="submit" value="Edit"/>
+            </form>
+            <form th:method="POST" th:action="@{/users/delete(id=${user.id})}">
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
     </tr>
     </tbody>
+
 </table>
 </body>
 </html>

@@ -11,13 +11,17 @@ import java.util.List;
 @Component
 public interface UserDao {
     List<User> getAll();
-    public void newUser();
 
     String newUser(@RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("age") Integer age, Model model);
 
     User createUser(@RequestBody User user);
 
-    public List<User> readUser();
-    public List<User> updateUser();
-    public void deleteUser();
+    public void updateUser(long id, User updatedUser);
+
+    public void deleteUser(long id);
+
+    public User getUserById(long id);
 }
+
+
+
