@@ -30,7 +30,7 @@ public class UsersController {
     }
 
     @GetMapping
-    public String printUsers(Model model) {
+    public String getAll(Model model) {
         model.addAttribute("users", userService.getAll());
         return "/users/users";
 
@@ -49,8 +49,8 @@ public class UsersController {
         return "redirect:/users";
     }
 
-    @GetMapping("/{id}")
-    public String editUserForm(@PathVariable("id") long id,
+    @PostMapping("/edit/form")
+    public String editUserForm(@RequestParam("id") Long id,
                                Model model) {
         model.addAttribute("user", userService.getUserById(id));
         return "/users/edit";

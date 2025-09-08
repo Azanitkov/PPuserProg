@@ -7,16 +7,19 @@ import org.springframework.stereotype.Service;
 import web.models.User;
 
 import java.util.List;
+
 @Service
 
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
+
     @Autowired
-    public UserServiceImpl(UserDao userDao){
+    public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
     }
-    public void add (User user){
+
+    public void add(User user) {
     }
 
     @Override
@@ -27,13 +30,24 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void deleteUser(long id) {
-        userDao.deleteUser(id);
+        User user = userDao.getUserById(id);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+        userDao.deleteUser(user);
     }
 
     @Override
     @Transactional
-    public void updateUser(long id, User updatedUser ) {
-        userDao.updateUser(id,updatedUser);
+    public void updateUser(long id, User updatedUser) {
+        User user = userDao.getUserById(id);
+        if (user != null) {
+            user.setName(updatedUser.getName());
+            user.setSurname(updatedUser.getSurname());
+            user.setAge(updatedUser.getAge());
+        }
+        userDao.updateUser(user);
+
     }
 
     @Override
@@ -43,7 +57,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public User createUser (User user){
+    public User createUser(User user) {
         System.out.println(user);
         return userDao.createUser(user);
     }

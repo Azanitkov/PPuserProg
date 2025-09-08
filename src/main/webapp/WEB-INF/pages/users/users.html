@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>users List</title>
 </head>
 <body>
@@ -29,7 +29,7 @@
         <td th:text="${user.surname}">surname</td>
         <td th:text="${user.age}">age</td>
         <td>
-            <form th:method="GET" th:action="@{/users/{id}(id=${user.id})}">
+            <form th:method="POST" th:action="@{/users/edit/form(id=${user.id})}">
                 <input type="submit" value="Edit"/>
             </form>
             <form th:method="POST" th:action="@{/users/delete(id=${user.id})}">

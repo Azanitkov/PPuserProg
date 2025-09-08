@@ -1,9 +1,7 @@
 package web.dao;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import web.models.User;
 
 import javax.persistence.EntityManager;
@@ -24,40 +22,22 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public String newUser(@RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("age") Integer age, Model model) {
-        User user = new User();
-
-        user.setName(name);
-        user.setSurname(surname);
-        user.setAge(age);
-
-        model.addAttribute("user", user);
-        return "redirect:/users";
-    }
-
-    @Override
     public User createUser(@RequestBody User user) {
         entityManager.persist(user);
         return user;
     }
 
     @Override
-    public void updateUser(long id, User updatedUser) {
-        User user = entityManager.find(User.class, id);
-        if (user != null) {
-            user.setName(updatedUser.getName());
-            user.setSurname(updatedUser.getSurname());
-            user.setAge(updatedUser.getAge());
-        }
+    public void updateUser(User updatedUser) {
+        entityManager.persist(updatedUser);
+
     }
 
     @Override
-    public void deleteUser(long id) {
-        User user = entityManager.find(User.class, id);
-        if (user != null) {
-            entityManager.remove(user);
-        }
+    public void deleteUser(User user) {
+        entityManager.remove(user);
     }
+
 
     @Override
     public User getUserById(long id) {
