@@ -45,11 +45,11 @@ public class UserServiceImpl implements UserService {
             user.setName(updatedUser.getName());
             user.setSurname(updatedUser.getSurname());
             user.setAge(updatedUser.getAge());
+        } else {
+            throw new RuntimeException("User not found");
         }
         userDao.updateUser(user);
-
     }
-
     @Override
     public User getUserById(long id) {
         return userDao.getUserById(id);
