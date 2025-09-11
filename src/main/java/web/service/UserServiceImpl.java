@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import web.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 
@@ -30,29 +31,23 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(long id) {
-        User user = userDao.getUserById(id);
-        if (user == null) {
-            throw new RuntimeException("User not found");
-        }
+        User user = getUserById(id).orElseThrow(()-> new RuntimeException("User not found"));
         userDao.deleteUser(user);
     }
 
     @Override
     @Transactional
     public void updateUser(long id, User updatedUser) {
-        User user = userDao.getUserById(id);
-        if (user != null) {
-            user.setName(updatedUser.getName());
-            user.setSurname(updatedUser.getSurname());
-            user.setAge(updatedUser.getAge());
-        } else {
-            throw new RuntimeException("User not found");
-        }
+        User user = getUserById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setName(updatedUser.getName());
+        user.setSurname(updatedUser.getSurname());
+        user.setAge(updatedUser.getAge());
         userDao.updateUser(user);
     }
+
     @Override
-    public User getUserById(long id) {
-        return userDao.getUserById(id);
+    public Optional<User> getUserById(long id) {
+        return Optional.ofNullable(userDao.getUserById(id));
     }
 
     @Override
